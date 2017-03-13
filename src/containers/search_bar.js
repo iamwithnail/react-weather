@@ -2,16 +2,19 @@
  * Created by chris on 12/03/2017.
  */
 import React, { Component } from 'react';
-const API_KEY = '1d18247d1f11e681bc689f2c99cce2d0'
-const endpoint = 'api.openweathermap.org/data/2.5/forecast?q={city name},{country code}'
+import { connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {fetchWeather } from '../actions/index';
 
-export default class SearchBar extends Component {
+
+class SearchBar extends Component {
     constructor (props) {
         super(props);
 
         this.state = { term: ''};
 
         this.onInputChange =this.onInputChange.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
     onInputChange(event) {
@@ -21,6 +24,9 @@ export default class SearchBar extends Component {
 
     onFormSubmit(event) {
         event.preventDefault();
+        this.props.fetchWeather(this.state.term);
+        // empty out the saerch string after submit.
+        this.setState({term: ''});
     }
 
     render() {
@@ -40,5 +46,11 @@ export default class SearchBar extends Component {
         </form>
         );
     }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators ({ fetchWeather}, dispatch);
 
 }
+// first argument here is null, as we don't need to patch any state in.
+export default connect(null, mapDispatchToProps)(SearchBar);

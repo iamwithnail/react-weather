@@ -3,8 +3,8 @@
  */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Chart from '../components/sparklinechart'
-
+import Chart from '../components/sparklinechart';
+import GoogleMap from '../components/google_maps';
 
 
 class WeatherList extends Component {
@@ -12,12 +12,16 @@ class WeatherList extends Component {
         const temps = cityData.list.map(weather => weather.main.temp);
         const pressure = cityData.list.map(weather => weather.main.pressure);
         const humidity = cityData.list.map(weather => weather.main.humidity);
-
         // the list.map iterates over every item in that list and pulls off the main.temp item to a new array
+
+        const { lon, lat } = cityData.city.coord;
+        //this is the ES6 shortcut syntax - bind all of the values out of city.coord to two new variables
+
+
 
         return (
             <tr key={cityData.city.id}>
-                <td>{cityData.city.name}</td>
+                <td><GoogleMap lon={lon} lat={lat} /></td>
                 <td>
                     <Chart data={temps} colour="blue" units="K"/>
                 </td>
